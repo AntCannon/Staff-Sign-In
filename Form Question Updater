@@ -1,0 +1,61 @@
+function identifyQuestions() {
+  var form = FormApp.openById("1f7jkUtbyAcR0PtHfsZcYFkScmDwWuFAzGwb3eWA6O_4")
+  var questions = form.getItems()
+  questions.forEach(question=>{
+    Logger.log(question.getTitle())
+    Logger.log(question.getType())
+    Logger.log(question.getId().toString())
+  })
+}
+
+/*
+function findStaffNameHeader () {
+  const text = 'Staff Name'
+  const staff_ss = ws.getSheetByName('Staff');
+  const textFinder = staff_ss.createTextFinder(text);
+  const allOccurances = textFinder.findAll();
+  const locationList = allOccurances.map(item => {
+    return {sheet: item.getsheet().getname(), cell: item.getA1Notaion()}
+  })
+  Logger.log(locationList);
+}
+*/
+
+function updateQuestion() {
+  var ws = SpreadsheetApp.getActiveSpreadsheet()
+  var staff_ss = ws.getSheetByName('Staff')
+// Searches for staff name
+  const text = 'Staff Name'
+  const textFinder = staff_ss.createTextFinder(text);
+  const allOccurances = textFinder.findAll();
+  const locationList = allOccurances.map(item => {
+    return item.getRow();
+  })
+  Logger.log(locationList[0] + 1);
+  var nextRow = locationList[0] +1
+//  Logger.log(nextRow)
+  var startAddress = 'A' + nextRow.toString()
+//  Logger.log(startAddress)
+  var staffNameRange = startAddress + ':A'
+
+  var staffArray = staff_ss.getRange(staffNameRange).getValues();
+  Logger.log(staffArray)
+  var filteredStaffArray = staffArray.filter(row=>row[0])
+  // Logger.log(filteredStaffArray)
+  var staffList = filteredStaffArray.map(row=>row[0])
+  // Logger.log(staffList)
+  var sortedStaffList = staffList.sort()
+  // Logger.log(sortedStaffList)
+
+  var form = FormApp.openById("1f7jkUtbyAcR0PtHfsZcYFkScmDwWuFAzGwb3eWA6O_4")
+  var selectnamequestion = form.getItemById("422056794")
+  selectnamequestion.asMultipleChoiceItem().setChoiceValues(sortedStaffList)
+}
+
+/* pulls the items from the connected form
+7:55:17 PM	Notice	Execution started
+7:55:18 PM	Info	Select Your Name
+7:55:18 PM	Info	MULTIPLE_CHOICE
+7:55:18 PM	Info	422056794
+7:55:18 PM	Notice	Execution completed
+*/
