@@ -1,5 +1,5 @@
 # Staff-Sign-In
-Google form wheere staff select their name and submit the form to sign in.
+Google form where staff select their name and submit the form to sign in.
 The staff list on the form updates automatically when the staff tab is updated.
 
 App script
